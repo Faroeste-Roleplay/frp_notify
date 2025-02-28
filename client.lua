@@ -1,49 +1,95 @@
--- FRP:TOAST:New -> "speech", "Simular a fala de um personagem"
--- FRP:TOAST:New -> "dev", "Mensagem com intuito de ser para Devs"
--- FRP:TOAST:New -> "alert", "Você é viado"
--- FRP:TOAST:New -> "alert", "Você é viado"
--- FRP:TOAST:New -> "success", "Você é viado"
--- FRP:TOAST:New -> "error", "Você é viado"
--- FRP:TOAST:New -> "gold", 10
--- FRP:TOAST:New -> "gold", -10
--- FRP:TOAST:New -> "dollar", 10
--- FRP:TOAST:New -> "dollar", -10
--- FRP:TOAST:New -> "item", "Pistola Vulcan", 10
--- FRP:TOAST:New -> "item", "Pistola Vulcan", -10
--- FRP:TOAST:New -> "longer_alert", "Toast que demora mais tempo para sumir, funciona para todos",
+RegisterNetEvent("FRP:TOAST:New",function(icon, mensagem, time)
+	if not time then
+		time = 5000
+	end
 
-RegisterNetEvent("FRP:TOAST:New")
-AddEventHandler("FRP:TOAST:New", function(type, text, quantity)
-    if type == "item" then
-        if ItemList[text] then
-            if text == "money" or text == "gold" then
-                quantity = quantity / 100
-                if text == "money" then
-                    type = "dollar"
-                elseif text == "gold" then
-                    type = "gold"
-                end
-            else
-                text = ItemList[text].name
-            end
-        end
-    end
+	local testDict = "generic_textures"
+	local testIcon = "tick"
+	local testColor = "COLOR_WHITE"
 
-    -- if tonumber(text) then
-    --     quantity = text
-    --     text = nil
-    -- end
+	if icon == "alert" then
+		testDict = 'menu_textures'
+		testIcon = 'menu_icon_alert'
+		testColor = "COLOR_ORANGE"
+	end
 
-    if type == "xp" then
-        quantity = text
-        text = nil
-    end
+	if icon == "verify" then
+		testDict = 'generic_textures'
+		testIcon = 'tick'
+	end
 
-    SendNUIMessage(
-        {
-            type = type,
-            text = text,
-            quantity = quantity
-        }
-    )
+	if icon == "locked" then
+		testDict = 'menu_textures'
+		testIcon = 'stamp_locked_rank'
+	end
+
+	if icon == "star" then
+		testDict = 'menu_textures'
+		testIcon = 'star'
+	end	
+	
+	if icon == "horse" then
+		testDict = 'HUD_TOASTS'
+		testIcon = 'toast_horse_bond'
+	end
+
+	if icon == "error" then
+		testDict = 'menu_textures'
+		testIcon = 'menu_icon_info_warning'
+	end
+	
+	Notification:NotifyAvanced(mensagem, testDict, testIcon, testColor, time)
 end)
+
+RegisterNetEvent("FRP:NOTIFY:Simple",function(mensagem, time)
+	if not time then
+		time = 5000
+	end
+	Notification:NotifyRightTip(mensagem, time)
+end)
+
+-- RegisterNetEvent("texas:notify:simple",function(mensagem, time)
+-- 	if not time then
+-- 		time = 5000
+-- 	end
+-- 	Notification:NotifyRightTip(mensagem, time)
+-- end)
+RegisterNetEvent("texas:notify:native",function(mensagem, time)
+	if not time then
+		time = 5000
+	end
+
+	SendNUIMessage({ css = 'sucesso', mensagem = mensagem, time =  time })
+end)
+
+RegisterNetEvent("texas:notify:simple",function(mensagem, time)
+	if not time then
+		time = 5000
+	end
+
+	SendNUIMessage({ css = 'sucesso', mensagem = mensagem, time =  time })
+end)
+
+
+-- RegisterNetEvent('blipALERTRED', function(targetCoords)
+-- 	--if isPlayerWhitelisted and Config.GunshotAlert then
+-- 		local alpha = 250
+-- 		local gunshotBlip = AddBlipForRadius(targetCoords.x, targetCoords.y, targetCoords.z, 160.0)
+
+-- 		SetBlipHighDetail(gunshotBlip, true)
+-- 		SetBlipSprite (gunshotBlip, 10)
+-- 		SetBlipColour (gunshotBlip, 1)
+-- 		SetBlipAlpha(gunshotBlip, alpha)
+-- 		SetBlipAsShortRange(gunshotBlip, true)
+
+-- 		while alpha ~= 0 do
+-- 			Citizen.Wait(50 * 4)
+-- 			alpha = alpha - 1
+-- 			SetBlipAlpha(gunshotBlip, alpha)
+-- 			if alpha == 0 then
+-- 				RemoveBlip(gunshotBlip)
+-- 				return
+-- 			end
+-- 		end
+-- 	--end
+-- end)
